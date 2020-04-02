@@ -1,6 +1,7 @@
 # server.rb
 require 'sinatra'
 require 'active_record'
+require "sinatra/namespace"
 
 # DB Setup
 ActiveRecord::Base.establish_connection(
@@ -24,10 +25,21 @@ User.create(name: 'Brandon', username: "brandonVergara")
 class App < Sinatra::Application
 end
 # Endpoints
-get '/ ' do
-  'Welcome to BookList!'
-end
+namespace '/api/v1' do
 
-get '/users' do
-  User.all.to_json
+  before do
+    content_type 'application/json'
+  end
+
+  get '/ ' do
+    'Welcome to BookList!'
+  end
+
+  get '/users' do
+    User.all.to_json
+  end
+
+  get '/users/1' do
+    halt(404, { message:'User1 Not Found'}.to_json)
+  end
 end
