@@ -14,6 +14,21 @@ ActiveRecord::Base.establish_connection(
 
 class User < ActiveRecord::Base
 end
+class UserSerializer
+  def initialize(user)
+    @user = user
+  end
+
+  def as_json(*)
+    data = {
+      id:@user.id.to_s,
+      name:@user.name,
+      username:@user.username
+    }
+    data[:errors] = @user.errors if@user.errors.any?
+    data
+  end
+end
 
 ActiveRecord::Migration.create_table :users, if_not_exists: true do |t|
   t.string :name
@@ -47,11 +62,21 @@ namespace '/api/v1' do
 
 
   get '/ ' do
-    'Welcome to BookList!'
+    'Welcome to userList!'
   end
 
   get '/users' do
     User.all.to_json
+  end
+
+  post '/users' do
+    user = User.new(json_params)
+    if user.save
+      status 201
+    else
+      status 422
+      body UserSerializer.new(user).to_json
+    end
   end
 
   get '/users/1' do
