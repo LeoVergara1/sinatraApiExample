@@ -2,7 +2,7 @@
 require 'sinatra'
 require 'active_record'
 require "sinatra/namespace"
-
+require 'sinatra/reloader'
 # DB Setup
 ActiveRecord::Base.establish_connection(
   :adapter  => "mysql2",
@@ -38,6 +38,7 @@ end
 User.create(name: 'Brandon', username: "brandonVergara")
 
 class App < Sinatra::Application
+  register Sinatra::Reloader
 end
 # Endpoints
 namespace '/api/v1' do
@@ -90,7 +91,7 @@ namespace '/api/v1' do
     if user
       user.to_json
     else
-      halt(404, { message:'User Not Found'}.to_json)
+      halt(404, { message:'User Not Found3'}.to_json)
     end
   end
 end
