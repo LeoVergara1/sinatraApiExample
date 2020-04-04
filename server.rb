@@ -80,17 +80,17 @@ namespace '/api/v1' do
   end
 
   delete '/users/:id' do |id|
-    user = User.where(id).first
+    user = User.where(id: id).first
     user.destroy if user
     status 204
   end
 
   get '/users/:id' do |id|
-    user = User.where(id).first
+    user = User.where(id: id).first
     if user
-      user
+      user.to_json
     else
-      halt(404, { message:'User1 Not Found'}.to_json)
+      halt(404, { message:'User Not Found'}.to_json)
     end
   end
 end
