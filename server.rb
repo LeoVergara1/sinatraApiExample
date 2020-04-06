@@ -13,6 +13,7 @@ ActiveRecord::Base.establish_connection(
 )
 
 class User < ActiveRecord::Base
+  #validates :name, presence: true
 end
 class UserSerializer
   def initialize(user)
